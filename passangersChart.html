@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div id="tester" style="width:600px;height:250px;"></div>
+
+    <script>
+
+        var years = ['2014', '2015', '2016']
+
+        Plotly.d3.csv('https://raw.githubusercontent.com/jleandrof/animated-memory/master/passageiros.csv', function(data) {
+            var x = [], y = [];
+
+            for (var i=0; i<data.length; i++) {
+                row = data[i];
+                x.push( row['Ano'] );
+                y.push( row['Total'] );
+            }
+
+            var traces = [{
+                x: x,
+                y: y,
+                type: 'bar',
+                marker: {color: 'rgb(26, 118, 255)'}
+            }];
+
+            var layout = {
+                title: 'Passageiros',
+                showlegend: false,
+                yaxis: {
+                    fixedrange: true
+                },
+                xaxis : {
+                    fixedrange: true
+                }
+            };
+
+            Plotly.newPlot('tester', traces, layout, {displayModeBar: false})
+        })
+
+    </script>
+</body>
+</html>
