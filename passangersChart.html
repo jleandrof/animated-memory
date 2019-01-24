@@ -11,8 +11,7 @@
 <body>
     <div class="raw" style="width:600px;height:250px;">
         <div id="Total" class="float-left" style="width:600px;height:250px;"></div>
-        <hr>
-        <div id="Equivalente" class="float-left" style="width:600px;height:250px;"></div>
+
         <a class="btn btn-primary float-right text-white" id="exportReportButton" ><small>Exportar para csv</small></a>
     </div>   
     <script>
@@ -21,24 +20,34 @@
         var plot = function(url_csv, id_div, title) {
 
             Plotly.d3.csv(url_csv, function(data) {
-            var x = [], y = [];
+            var x = [], y1 = [], y2 = [];
 
             for (var i=0; i<data.length; i++) {
                 row = data[i];
                 x.push( row['Ano'] );
-                y.push( row[id_div] );
+                y1.push( row['Total'] );
+                y2.push( row['Equivalente'] );
             }
 
             var traces = [{
                 x: x,
-                y: y,
+                y: y1,
                 type: 'bar',
-                marker: {color: 'rgb(26, 118, 255)'}
-            }];
+                marker: {color: 'blue'},
+                name: 'Total'
+            },{
+                x: x,
+                y: y2,
+                type: 'bar',
+                marker: {color: 'green'},
+                name: 'Equivalente'
+            }
+            
+            ];
 
             var layout = {
                 title: title,
-                showlegend: false,
+                showlegend: true,
                 yaxis: {
                     fixedrange: true,
                     tickformat : '.d',
@@ -55,9 +64,8 @@
         }
 
 
-        plot('https://raw.githubusercontent.com/jleandrof/animated-memory/master/passageiros.csv', 'Total', 'Total de passageiros por ano');
-        plot('https://raw.githubusercontent.com/jleandrof/animated-memory/master/passageiros.csv', 'Equivalente', 'Passageiros equivalentes por ano');
-
+        plot('https://raw.githubusercontent.com/jleandrof/animated-memory/master/passageiros.csv', 'Total', 'Passageiros por ano');
+        
 
 
         
@@ -67,7 +75,7 @@
 //When the export report button is clicked, download what is shown in the report as 
 //a CSV file.  The lastValue tracking helps ensures that no row is recorded more than once.
 $('#exportReportButton').on('click', function() { 
-    var theReport = 'Ano,Total\n2008,98975878\n2009,96231912\n2010,99941489\n2011,95625648\n2012,91217151\n2013,90723508\n2014,94659784\n2015,94926783\n2016,89057825\n2017,81795437\n2018,79110437' 
+    var theReport = 'Ano,Total,Equivalente\n2008,98975878,84184948\n2009,96231912,82440953\n2010,99941489,86938347\n2011,95625648,82822695\n2012,91217151,79686176\n2013,90723508,80668760\n2014,94659784,83828651\n2015,94926783,83137587\n2016,89057825,77220340\n2017,81795437,69011262\n2018,79110437,66299121'
   var element = document.createElement('a');
   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(theReport));
   element.setAttribute('download', 'total de passageiros.csv');
