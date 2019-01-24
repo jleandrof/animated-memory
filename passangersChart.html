@@ -10,20 +10,23 @@
 </head>
 <body>
     <div class="raw" style="width:600px;height:250px;">
-        <div id="tester" class="float-left" style="width:600px;height:250px;"></div>
+        <div id="Total" class="float-left" style="width:600px;height:250px;"></div>
+        <hr>
+        <div id="Equivalente" class="float-left" style="width:600px;height:250px;"></div>
         <a class="btn btn-primary float-right text-white" id="exportReportButton" ><small>Exportar para csv</small></a>
     </div>   
     <script>
 
-        var years = ['2014', '2015', '2016']
 
-        Plotly.d3.csv('https://raw.githubusercontent.com/jleandrof/animated-memory/master/passageiros.csv', function(data) {
+        var plot = function(url_csv, id_div, title) {
+
+            Plotly.d3.csv(url_csv, function(data) {
             var x = [], y = [];
 
             for (var i=0; i<data.length; i++) {
                 row = data[i];
                 x.push( row['Ano'] );
-                y.push( row['Total'] );
+                y.push( row[id_div] );
             }
 
             var traces = [{
@@ -34,19 +37,26 @@
             }];
 
             var layout = {
-                margin:{b:20},
-                title: 'Total de passageiros por ano',
+                title: title,
                 showlegend: false,
                 yaxis: {
-                    fixedrange: true
+                    fixedrange: true,
+                    tickformat : '.d',
+                    tickmode : 'array'
                 },
                 xaxis : {
                     fixedrange: true
                 }
             };
 
-            Plotly.newPlot('tester', traces, layout, {displayModeBar: false})
-        })
+            Plotly.newPlot(id_div, traces, layout, {displayModeBar: false})
+        });
+
+        }
+
+
+        plot('https://raw.githubusercontent.com/jleandrof/animated-memory/master/passageiros.csv', 'Total', 'Total de passageiros por ano');
+        plot('https://raw.githubusercontent.com/jleandrof/animated-memory/master/passageiros.csv', 'Equivalente', 'Passageiros equivalentes por ano');
 
 
 
